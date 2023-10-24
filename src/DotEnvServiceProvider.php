@@ -2,7 +2,6 @@
 
 namespace Farshadth\DotEnv;
 
-use Farshadth\DotEnv\Commands\DotEnvCommand;
 use Illuminate\Support\ServiceProvider;
 
 class DotEnvServiceProvider extends ServiceProvider
@@ -12,9 +11,11 @@ class DotEnvServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-
+        $this->app->bind('DotEnv', function ($app) {
+            return new DotEnv($app);
+        });
     }
 
     /**

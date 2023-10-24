@@ -2,21 +2,38 @@
 
 namespace Farshadth\DotEnv;
 
+
+use Illuminate\Contracts\Foundation\Application;
+
 class DotEnv
 {
+    private const ENV_FILE = '.env';
+
     private string $envPath;
 
-    public function __construct(string $envPath = null)
+    protected Application $app;
+
+    public function __construct(Application $app)
     {
-        $this->envPath = $envPath ?? base_path('.env');
+        $this->app = $app;
+        $this->envPath = base_path(self::ENV_FILE);
         throw_if(!file_exists($this->envPath), new \Exception('.env file not found'));
     }
 
-    public function get(string $key): ?string
+    public function get(string $key): string
     {
-        $content = parse_ini_file($this->envPath);
+        $envFile = file_get_contents($this->envPath);
+        $matches = [];
+        preg_match("/^{$key}=(.*)$/m", $envFile, $matches);
 
-        return $content[$key] ?? null;
+        return trim($matches[1] ?? '');
+    }
+
+    public function getList(array $data): array
+    {
+        return collect($data)->flatMap(function ($value, $key) {
+            return [$value => $this->get($value)];
+        })->toArray();
     }
 
     public function set(string $key, string $value): void
@@ -32,6 +49,13 @@ class DotEnv
         file_put_contents($this->envPath, $envFile);
     }
 
+    public function setList(array $data): void
+    {
+        collect($data)->each(function ($value, $key) {
+            $this->set($key, $value);
+        });
+    }
+
     public function delete(string $key): void
     {
         $envFile = file_get_contents($this->envPath);
@@ -39,11 +63,18 @@ class DotEnv
         file_put_contents($this->envPath, $envFile);
     }
 
+    public function deleteList(array $data): void
+    {
+        collect($data)->each(function ($value, $key) {
+            $this->delete($value);
+        });
+    }
+
     public function exists(string $key): bool
     {
-        $content = parse_ini_file($this->envPath);
+        $envFile = file_get_contents($this->envPath);
 
-        return isset($content[$key]);
+        return preg_match("/^{$key}=(.*)$/m", $envFile);
     }
 
     public function getFileContent(): string
@@ -68,5 +99,55 @@ class DotEnv
         $this->delete($key);
 
         return $value;
+    }
+
+    public function copyFile(string $from = null, string $to): void
+    {
+        $from = $from ?? $this->envPath;
+        $this->checkFileExists([$from, $to]);
+        copy($from, $to);
+    }
+
+    public function moveFile(string $from = null, string $to): void
+    {
+        $from = $from ?? $this->envPath;
+        $this->checkFileExists([$from, $to]);
+        rename($from, $to);
+    }
+
+    public function setFilePath(string $envPath): void
+    {
+        $this->checkFileExists($envPath);
+        $this->envPath = $envPath;
+    }
+
+    public function getFilePath(): string
+    {
+        return $this->envPath;
+    }
+
+    public function deleteFile(string $envPath = null): void
+    {
+        $envPath = $envPath ?? $this->envPath;
+        $this->checkFileExists($envPath);
+        unlink($envPath);
+    }
+
+    public function createFile(string $envPath = null): void
+    {
+        $envPath = $envPath ?? $this->envPath;
+
+        if (!file_exists($envPath)) {
+            touch($envPath);
+        }
+    }
+
+    private function checkFileExists(mixed $envPath): void
+    {
+        $envPath = (array)$envPath;
+
+        collect($envPath)->each(function ($path) {
+            throw_if(!file_exists($path), new \Exception("file $path not found"));
+        });
     }
 }
