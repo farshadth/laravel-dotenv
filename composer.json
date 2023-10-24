@@ -31,12 +31,10 @@
     "autoload": {
         "psr-4": {
             "Farshadth\\DotEnv\\": "src/",
-            "Farshadth\\DotEnv\\Database\\Factories\\": "database/factories/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Farshadth\\DotEnv\\Tests\\": "tests/",
             "Workbench\\App\\": "workbench/app/"
         }
     },
