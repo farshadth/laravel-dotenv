@@ -71,7 +71,7 @@
                 "Farshadth\\DotEnv\\DotEnvServiceProvider"
             ],
             "aliases": {
-                "DotEnv": "Farshadth\\DotEnv\\Facades\\DotEnv"
+                "DotEnv": "DotEnvFacade"
             }
         }
     },
