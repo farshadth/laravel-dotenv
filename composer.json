@@ -30,7 +30,7 @@
     },
     "autoload": {
         "psr-4": {
-            "Farshadth\\DotEnv\\": "src/",
+            "Farshadth\\DotEnv\\": "src/"
         }
     },
     "autoload-dev": {
