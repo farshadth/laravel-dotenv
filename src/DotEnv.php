@@ -3,6 +3,7 @@
 namespace Farshadth\DotEnv;
 
 
+use Farshadth\DotEnv\Exceptions\FileNotFoundException;
 use Illuminate\Contracts\Foundation\Application;
 
 class DotEnv
@@ -17,7 +18,6 @@ class DotEnv
     {
         $this->app = $app;
         $this->envPath = base_path(self::ENV_FILE);
-        throw_if(!file_exists($this->envPath), new \Exception('.env file not found'));
     }
 
     public function get(string $key): string
@@ -72,7 +72,7 @@ class DotEnv
 
     public function exists(string $key): bool
     {
-        $envFile = file_get_contents($this->envPath);
+        $envFile = $this->getFileContent();
 
         return preg_match("/^{$key}=(.*)$/m", $envFile);
     }
@@ -101,14 +101,14 @@ class DotEnv
         return $value;
     }
 
-    public function copyFile(string $from = null, string $to): void
+    public function copyFile(string $to, string $from = null): void
     {
         $from = $from ?? $this->envPath;
         $this->checkFileExists([$from, $to]);
         copy($from, $to);
     }
 
-    public function moveFile(string $from = null, string $to): void
+    public function moveFile(string $to, string $from = null): void
     {
         $from = $from ?? $this->envPath;
         $this->checkFileExists([$from, $to]);
@@ -147,7 +147,7 @@ class DotEnv
         $envPath = (array)$envPath;
 
         collect($envPath)->each(function ($path) {
-            throw_if(!file_exists($path), new \Exception("file $path not found"));
+            throw_if(!file_exists($path), new FileNotFoundException("File {$path} not found"));
         });
     }
 }

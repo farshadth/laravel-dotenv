@@ -1,84 +1,81 @@
-# This is a package to edit .env file
+# Laravel DotEnv 
+Laravel DotEnv is a simple package for editing .env files in Laravel projects. This package allows you to read, edit, or delete values in the .env file. Additionally, you can copy or move the .env file.
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/farshadth/laravel-dotenv.svg?style=flat-square)](https://packagist.org/packages/farshadth/laravel-dotenv)
-[![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/farshadth/laravel-dotenv/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/farshadth/laravel-dotenv/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/farshadth/laravel-dotenv/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/farshadth/laravel-dotenv/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
-[![Total Downloads](https://img.shields.io/packagist/dt/farshadth/laravel-dotenv.svg?style=flat-square)](https://packagist.org/packages/farshadth/laravel-dotenv)
+# Installation
+You can install this package via composer:
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/Laravel-DotEnv.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/Laravel-DotEnv)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
-
-## Installation
-
-You can install the package via composer:
-
-```bash
+```php
 composer require farshadth/laravel-dotenv
 ```
 
-You can publish and run the migrations with:
+# Available Methods
 
-```bash
-php artisan vendor:publish --tag="laravel-dotenv-migrations"
-php artisan migrate
-```
+>* get()
+>* getList()
+>* set()
+>* setList()
+>* delete()
+>* deleteList()
+>* exists()
+>* getFileContent()
+>* getOrSet()
+>* getAndDelete()
+>* copyFile()
+>* moveFile()
+>* setFilePath()
+>* getFilePath()
+>* deleteFile()
+>* createFile()
 
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="laravel-dotenv-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-Optionally, you can publish the views using
-
-```bash
-php artisan vendor:publish --tag="laravel-dotenv-views"
-```
-
-## Usage
+# Examples
 
 ```php
-$dotEnv = new Farshadth\DotEnv();
-echo $dotEnv->echoPhrase('Hello, Farshadth!');
-```
+DotEnv::get($key);
 
-## Testing
+// get multiple keys
+DotEnv::getList(['key1', 'key2'])
 
-```bash
-composer test
-```
+DotEnv::set($key, $value);
 
-## Changelog
+// set multiple keys and values
+DotEnv::setList([
+    'key1' => 'value1', 
+    'key2' => 'value2'
+]);
 
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
+DotEnv::delete($key);
 
-## Contributing
+DotEnv::deleteList(['key1', 'key2'])
 
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
+DotEnv::exists($key);
+ 
+ // get the content of the .env file
+DotEnv::getFileContent(); 
 
-## Security Vulnerabilities
+// get the key and if not exists
+// set the key and value
+DotEnv::getOrSet($key, $value); 
 
-Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
+// get the key and delete it
+DotEnv::getAndDelete($key); 
 
-## Credits
+// copy the .env file to the new path
+DotEnv::copyFile($to, $from);
 
-- [Farshad](https://github.com/farshadth)
-- [All Contributors](../../contributors)
+// move the .env file to the new path
+DotEnv::moveFile($to, $from);
 
-## License
+// set another .env file path to edit that file
+// instead of the default .env file
+DotEnv::setFilePath($path);
 
-The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+// get the default .env file path,
+// if another .env file is set it returns that path
+DotEnv::getFilePath();
+
+// delete the .env file
+DotEnv::deleteFile($path = null);
+
+// create an empty .env file
+DotEnv::createFile($path);
+``` 
