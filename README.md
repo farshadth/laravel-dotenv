@@ -30,6 +30,8 @@ composer require farshadth/laravel-dotenv
 # Examples
 
 ```php
+use Farshadth\DotEnv\Facades\DotEnv;
+
 DotEnv::get($key);
 
 // get multiple keys
