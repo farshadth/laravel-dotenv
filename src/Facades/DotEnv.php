@@ -15,12 +15,12 @@ use Illuminate\Support\Facades\Facade;
  * @method static string getFileContent()
  * @method static string getOrSet(string $key, string $value)
  * @method static string getAndDelete(string $key)
- * @method static void copyFile(string $from = null, string $to)
- * @method static void moveFile(string $from = null, string $to)
+ * @method static void copyFile(string $to, string $from = null)
+ * @method static void moveFile(string $to, string $from = null)
  * @method static void setFilePath(string $envPath)
  * @method static string getFilePath()
- * @method static bool deleteFile(string $envPath)
- * @method static bool createFile(string $envPath)
+ * @method static bool deleteFile(string $envPath = null)
+ * @method static bool createFile(string $envPath = null)
  *
  *
  * @see \Farshadth\DotEnv\DotEnv

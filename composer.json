@@ -6,8 +6,8 @@
         "laravel",
         "laravel-dotenv"
     ],
-    "homepage": "https://github.com/farshadth/laravel-dotenv",
     "license": "MIT",
+    "homepage": "https://github.com/farshadth/laravel-dotenv",
     "authors": [
         {
             "name": "Farshad",
@@ -73,6 +73,6 @@
             }
         }
     },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true
 }
